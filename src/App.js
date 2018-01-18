@@ -38,7 +38,7 @@ class App extends Component {
 
       <MenuAppBar/>
 
-      <Grid container spacing ={ 10 } >
+      <Grid container spacing ={ 12 } >
           <Grid item xs={12} sm={3}>
           <ListOfTables/>
         </Grid>
