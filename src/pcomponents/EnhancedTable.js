@@ -3,6 +3,7 @@ import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
+import Button from 'material-ui/Button';
 import Table, {
     TableBody,
     TableCell,
@@ -116,6 +117,8 @@ const toolbarStyles = theme => ({
     title: {
         flex: '0 0 auto',
     },
+
+  
 });
 
 let EnhancedTableToolbar = props => {
@@ -172,6 +175,14 @@ const styles = theme => ({
     tableWrapper: {
         overflowX: 'auto',
     },
+    addrow: {
+
+        width: 100,
+        float: 'right',
+        marginLeft: '80%',
+
+    
+      }
 });
 
 class EnhancedTable extends React.Component {
@@ -263,7 +274,8 @@ class EnhancedTable extends React.Component {
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
         return (
-            <Paper className={classes.root}>
+            <div>
+       {/* //     <Paper className={classes.root}> */}
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table}>
@@ -304,8 +316,15 @@ class EnhancedTable extends React.Component {
                                     <TableCell colSpan={6} />
                                 </TableRow>
                             )}
+
                         </TableBody>
+
+                       
                         <TableFooter>
+                       
+                        <Button   className={ classes.addrow } color="accent" > Add row </Button>
+                                
+
                             <TableRow>
                                 <TablePagination
                                     colSpan={6}
@@ -321,11 +340,20 @@ class EnhancedTable extends React.Component {
                                     onChangePage={this.handleChangePage}
                                     onChangeRowsPerPage={this.handleChangeRowsPerPage}
                                 />
+                                
+                             
                             </TableRow>
+                         
+                        
+                             
+
                         </TableFooter>
                     </Table>
+                
                 </div>
-            </Paper>
+           {/* </Paper> */}
+
+         </div>
         );
     }
 }
