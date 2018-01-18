@@ -65,6 +65,7 @@ export default withStyles(styles)(ListOfTables);
 /**
  * What should this component receive
  * tables[]
- * onAddTable()
- * onTableClicked
+ * onAddTable(data)
+ * onRemoveTable(tableID)
+ * onTableClicked(tableID)
  */
