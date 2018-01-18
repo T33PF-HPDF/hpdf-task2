@@ -30,12 +30,25 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const columnData = [
-    { id: 'name', numeric: false, disablePadding: true, label: 'Dessert (100g serving)' },
-    { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
-    { id: 'fat', numeric: true, disablePadding: false, label: 'Fat (g)' },
-    { id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)' },
-    { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
+    // { id: 'name', numeric: false, disablePadding: true, label: 'Dessert (100g serving)' },
+    // { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
+    // { id: 'fat', numeric: true, disablePadding: false, label: 'Fat (g)' },
+    // { id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)' },
+    // { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
 ];
+
+function createColumn(columnId,numeric,label,disablePadding){
+
+    return  { id: columnId, numeric: numeric, disablePadding: disablePadding, label: label || columnId }
+
+}
+
+ columnData.push(createColumn("name",false,'Dessert (100g serving)',true));
+ columnData.push(createColumn("calories",true,'Calories'));
+ columnData.push(createColumn("fat",false,'Fat (g)'));
+ columnData.push(createColumn("carbs",false,'Carbs (g)'));
+ columnData.push(createColumn("protein",false,'Protein (g)'));
+
 
 class EnhancedTableHead extends React.Component {
     createSortHandler = (property ) => ( event ) => {
@@ -55,7 +68,7 @@ class EnhancedTableHead extends React.Component {
                             onChange={onSelectAllClick}
                         />
                     </TableCell>
-                    {columnData.map(column => {
+                    {this.props.columnData.map(column => {
                         return (
                             <TableCell
                                 key={column.id}
@@ -207,7 +220,9 @@ class EnhancedTable extends React.Component {
                 createData('Marshmallow', 318, 0, 81, 2.0),
                 createData('Nougat', 360, 19.0, 9, 37.0),
                 createData('Oreo', 437, 18.0, 63, 4.0),
-            ].sort((a, b) => (a.calories < b.calories ? -1 : 1)),
+            ]
+           // .sort((a, b) => (a.calories < b.calories ? -1 : 1))
+            ,
             page: 0,
             rowsPerPage: 5,
         };
@@ -280,6 +295,7 @@ class EnhancedTable extends React.Component {
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table}>
                         <EnhancedTableHead
+                            columnData = { columnData }
                             numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
@@ -288,6 +304,7 @@ class EnhancedTable extends React.Component {
                             rowCount={data.length}
                         />
                         <TableBody>
+
                             {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
                                 const isSelected = this.isSelected(n.id);
                                 return (
@@ -311,6 +328,7 @@ class EnhancedTable extends React.Component {
                                     </TableRow>
                                 );
                             })}
+
                             {emptyRows > 0 && (
                                 <TableRow style={{ height: 49 * emptyRows }}>
                                     <TableCell colSpan={6} />
@@ -363,3 +381,11 @@ EnhancedTable.propTypes = {
 };
 
 export default withStyles(styles)(EnhancedTable);
+
+/**
+ * What this component should recive 
+ * Rows
+ * Columns
+ * onAddRow(row)
+ * onDeleteRow(rows[])
+ */
