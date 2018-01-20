@@ -53,7 +53,7 @@ class ListOfTables extends React.Component {
       <div className={classes.root}>
 
         {
-          <AddTable
+          this.state.openAddTable && <AddTable
             closeAddTable={this.closeAddTable}
             onAddTableResult={(res)=>{
 
