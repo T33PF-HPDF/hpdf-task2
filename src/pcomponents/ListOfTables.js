@@ -7,6 +7,8 @@ import Divider from 'material-ui/Divider';
 import InboxIcon from 'material-ui-icons/Inbox';
 import DraftsIcon from 'material-ui-icons/Drafts';
 import Button from 'material-ui/Button';
+import AddTable from './AddTable';
+
 
 const styles = theme => ({
   root: {
@@ -16,11 +18,11 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 2,
   },
   head: {
-        'font-weight':'bold',
+    'font-weight': 'bold',
 
   },
   selected: {
-      'backgroundColor':'silver',
+    'backgroundColor': 'silver',
   },
 
   addtable: {
@@ -32,28 +34,76 @@ const styles = theme => ({
   }
 });
 
-function ListOfTables(props) {
-  const { classes } = props;
-  return (
-    <div className={classes.root}>
-      <List>
-        <ListItem className = {classes.head}>
-          <ListItemText primary="Tables" className = {classes.head} />
-        </ListItem>
-      </List>
-      <Divider />
-      <List>
-        <ListItem button>
-          <ListItemText primary="Trash" />
-        </ListItem>
-        <ListItem button component="a" href="#simple-list" className= {classes.selected} onClick={()=>{alert('clicked')}}>
-          <ListItemText primary="Nutrition"  />
-        </ListItem>
-          <Button color="accent"  className= {classes.addtable}  > Add table </Button>
-    
-      </List>
-    </div>
-  );
+class ListOfTables extends React.Component {
+
+  state = {
+    openAddTable: true
+  }
+
+
+  closeAddTable() {
+    this.setState({
+      openAddTable: false
+    })
+  }
+
+  render() {
+    const { classes, tables, onChangeTable, selectedTable } = this.props;
+    return (
+      <div className={classes.root}>
+
+        {
+          <AddTable
+            closeAddTable={this.closeAddTable}
+            onAddTableResult={(res)=>{
+
+  
+    this.closeAddTable();
+    this.props.onAddTableResult(res);
+  
+            }}
+            openAddTable={this.state.openAddTable}
+            closeAddTable={
+              () =>
+                this.setState({
+                  openAddTable: false
+                })
+            }
+          > </AddTable>
+        }
+
+        <List>
+          <ListItem className={classes.head}>
+            <ListItemText primary="Tables" className={classes.head} />
+          </ListItem>
+        </List>
+
+        <Divider />
+
+
+
+        <List>
+
+          {tables.map(function (value, i) {
+
+            console.log(value);
+
+            return <ListItem button component="a" href="#simple-list" className={value.table_id === selectedTable ? classes.selected : ""} onClick={() => { onChangeTable(value) }}>
+              <ListItemText primary={value.table_name} />
+            </ListItem>
+
+          })}
+
+          <Button color="accent" className={classes.addtable} onClick={() => {
+            this.setState({
+              openAddTable: true
+            })
+          }} > Add table </Button>
+
+        </List>
+      </div>
+    );
+  }
 }
 
 ListOfTables.propTypes = {
