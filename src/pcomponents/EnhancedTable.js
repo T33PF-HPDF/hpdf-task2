@@ -24,7 +24,7 @@ import Tooltip from 'material-ui/Tooltip';
 import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
 import { lighten } from 'material-ui/styles/colorManipulator';
-import index from 'jss';
+// import index from 'jss';
 
 
 
@@ -51,22 +51,22 @@ class EnhancedTableHead extends React.Component {
                     {this.props.columnData.map(column => {
                         return (
                             <TableCell
-                                key={column.id}
-                                numeric={column.numeric}
-                                padding={column.disablePadding ? 'none' : 'default'}
-                                sortDirection={orderBy === column.id ? order : false}
+                                key={column}
+                                // numeric={column.numeric}
+                                // padding={column.disablePadding ? 'none' : 'default'}
+                                sortDirection={orderBy === column ? order : false}
                             >
                                 <Tooltip
                                     title="Sort"
-                                    placement={column.numeric ? 'bottom-end' : 'bottom-start'}
+                                     placement={column.numeric ? 'bottom-end' : 'bottom-start'}
                                     enterDelay={300}
                                 >
                                     <TableSortLabel
-                                        active={orderBy === column.id}
+                                        active={orderBy === column}
                                         direction={order}
-                                        onClick={this.createSortHandler(column.id)}
+                                        onClick={this.createSortHandler(column)}
                                     >
-                                        {column.label}
+                                        {column}
                                     </TableSortLabel>
                                 </Tooltip>
                             </TableCell>
@@ -197,6 +197,7 @@ class EnhancedTable extends React.Component {
             //,
             page: 0,
             rowsPerPage: 5,
+            newRow : {}
         };
     }
 
@@ -264,7 +265,12 @@ class EnhancedTable extends React.Component {
         return (
             <div>
                 <Paper className={classes.root}>
-                    <EnhancedTableToolbar numSelected={selected.length} onDeleteRow= { this.props.onDeleteRows} tableName={this.props.tableName} />
+                    <EnhancedTableToolbar 
+                    numSelected={selected.length} 
+                    onDeleteRow= { ()=> {this.props.onDeleteRows(this.state.selected)}} 
+
+                    tableName={this.props.tableName} />
+
                     <div className={classes.tableWrapper}>
                         <Table className={classes.table}>
                             <EnhancedTableHead
@@ -284,9 +290,8 @@ class EnhancedTable extends React.Component {
                                     this.props.columnData.forEach((value, index) => {
                                         rows.push(
                                             {
-                                                label: n[value.id],
-                                                disablePadding: value.disablePadding,
-                                                numeric: value.numeric,
+                                                label: n[value],
+                                               
                                             }
                                         );
                                     })
@@ -328,7 +333,7 @@ class EnhancedTable extends React.Component {
 
                                     </TableCell>
 
-                                    {this.props.columnData.map((value, index) =>
+                                    {this.props.columnData.map((value, i) =>
 
                                         <TableCell style={{
 
@@ -340,6 +345,13 @@ class EnhancedTable extends React.Component {
                                                 className={classes.textField}
                                                  className={classes.textField}
                                                 margin="normal"
+                                                value={this.state.newRow[value]}
+                                                onChange = {
+                                                    (e)=>{
+                                                    var newState=Object.assign({},this.state);
+                                                    newState.newRow[value]=e.target.value
+                                                    this.setState(newState)
+                                                }}
                                             />
                                         </TableCell>
                                     )}
@@ -357,7 +369,18 @@ class EnhancedTable extends React.Component {
                                     <TableCell style={{
                                         width: 'auto'
                                     }}>
-                                        {<Button className={classes.addrow} color="accent" > Add row </Button>
+                                        {<Button className={classes.addrow} color="accent" onClick = {
+                                            ()=>{
+                                               
+                                               
+                                                   this.props.addNewRow(Object.assign({},this.state.newRow));
+                                                    this.setState({
+                                                        newRow :{}
+                                                    })
+                                             
+
+                                            }
+                                        }> Add row </Button>
                                         }
                                     </TableCell>
                                 </TableRow>

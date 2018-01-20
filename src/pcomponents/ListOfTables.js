@@ -16,6 +16,7 @@ const styles = theme => ({
     maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
     marginTop: theme.spacing.unit * 2,
+    overflow: 'auto'
   },
   head: {
     'font-weight': 'bold',
@@ -29,7 +30,8 @@ const styles = theme => ({
 
     width: 110,
     float: 'right',
-    margin: 5
+    margin: 5,
+
 
   }
 });

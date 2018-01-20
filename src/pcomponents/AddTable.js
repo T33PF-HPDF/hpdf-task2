@@ -31,7 +31,8 @@ function getModalStyle() {
         boxShadow: '0 5px 15px rgba(0, 0, 0, .5)',
         padding: 8 * 4,
         margin: 'auto',
-        display: 'inline-block'
+        display: 'inline-block',
+        overflow: 'auto'
     };
 }
 
@@ -43,6 +44,9 @@ var styles = {
         padding: 5,
         margin: 5
 
+    },
+    root:{
+        overflow: 'auto',
     },
     textField: {
 
@@ -58,7 +62,8 @@ var styles = {
     flable: {
         display: 'block',
         margin: 10,
-        width: '100%'
+        width: '100%',
+        overflow: 'auto',
     },
 
 }
@@ -69,7 +74,7 @@ class AddTable extends Component {
 
         table_name: '',
 
-        columnNames: [],
+        columnNames: new Set(),
 
         newField: '',
 
@@ -77,12 +82,16 @@ class AddTable extends Component {
 
     onAddTable() {
 
-      if(  this.state.columnNames.length==0 ) return
+      if(  this.state.columnNames.length==0 || this.state.table_name.length === 0)
+      {
+          alert("Incomplete data for creating a table");
+      return
+    }
         
         this.props.onAddTableResult(
             {
                 table_name: this.state.table_name,
-                columnNames: this.state.columnNames
+                columnNames: [...this.state.columnNames]
             }
         );
     }
@@ -128,19 +137,19 @@ class AddTable extends Component {
                 <Typography type="subheading" id="simple-modal-description">
 
 
-                    {this.state.columnNames.map((val, i) => {
+                    {[...this.state.columnNames].map((val, i) => {
                         return <div><Chip
                             label={val}
 
                             onDelete={() => {
 
-                                var newColumnNames = this.state.columnNames.slice();
+                                var newColumnNames = new Set([...this.state.columnNames]);
 
-                                newColumnNames.splice(i, 1);
+                                newColumnNames.delete(val);
 
                                 this.setState(
                                     {
-                                        columnNames: newColumnNames
+                                        columnNames: new Set([...newColumnNames])
                                     }
                                 )
 
@@ -167,11 +176,11 @@ class AddTable extends Component {
                     />
                     <Button mini onClick={() => {
 
-                        if (this.state.newField.length > 0)
+                        if (this.state.newField.length > 0 )
 
                             this.setState({
                                 newField: "",
-                                columnNames: [...this.state.columnNames, this.state.newField]
+                                columnNames: new Set([...this.state.columnNames, this.state.newField])
                             })
                     }} > Add column</Button>
 

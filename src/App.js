@@ -8,8 +8,7 @@ import Reboot from 'material-ui/Reboot';
 import EnhancedTable from './pcomponents/EnhancedTable';
 import ListOfTables from './pcomponents/ListOfTables';
 
-var columnData = [
-];
+
 
 let counter = 0;
 function createData(name, calories, fat, carbs, protein) {
@@ -17,21 +16,7 @@ function createData(name, calories, fat, carbs, protein) {
   return { id: counter, name, calories, fat, carbs, protein };
 }
 
-let data = [
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Donut', 452, 25.0, 51, 4.9),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Honeycomb', 408, 3.2, 87, 6.5),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0),
-  createData('KitKat', 518, 26.0, 65, 7.0),
-  createData('Lollipop', 392, 0.2, 98, 0.0),
-  createData('Marshmallow', 318, 0, 81, 2.0),
-  createData('Nougat', 360, 19.0, 9, 37.0),
-  createData('Oreo', 437, 18.0, 63, 4.0),
-]
+
 
 function createColumn(columnId, numeric, label, disablePadding) {
 
@@ -43,6 +28,7 @@ function createColumn(columnId, numeric, label, disablePadding) {
 
 function onDeleteRows(rowIDs) {
 
+  alert(JSON.stringify(rowIDs));
 
 
 }
@@ -130,7 +116,24 @@ class App extends Component {
     selectedTable: 2
   }
 
+  constructor(){
+    super();
+
+  //   columnData = [];
+
+  //   this.state.tables[this.state.selectedTable].columnNames.forEach((val,i)=>{
+
+  //  columnData.push(createColumn(val, false, val, true));
+
+  //   })
+  }
+
   onAddRow(row) {
+
+
+    counter ++;
+    row.id =counter;
+
 
     var newstate = {
       ... this.state,
@@ -216,13 +219,6 @@ class App extends Component {
 
   render() {
 
-    columnData = [];
-
-    this.state.tables[this.state.selectedTable].columnNames.forEach((val,i)=>{
-
-   columnData.push(createColumn(val, false, val, true));
-
-    })
 
 
 
@@ -255,7 +251,22 @@ class App extends Component {
                 }} />
             </Grid>
             <Grid item xs={12} sm={9}>
-              <EnhancedTable tableName={this.state.tables[this.state.selectedTable].table_name} rows={this.state.tables[this.state.selectedTable].rows} columnData={columnData} onAddRow={() => { }} onDeleteRows={onDeleteRows} />
+              <EnhancedTable tableName={this.state.tables[this.state.selectedTable].table_name} 
+              rows={this.state.tables[this.state.selectedTable].rows} 
+              columnData={this.state.tables[this.state.selectedTable].columnNames} 
+              onAddRow={() => { }} 
+              addNewRow = {(row)=>{
+                
+                var newState = Object.assign({},this.state);
+
+              newState.tables[this.state.selectedTable].rows=  [...newState.tables[this.state.selectedTable].rows,row]
+
+                this.setState(newState);
+
+                alert(JSON.stringify(row));
+
+              }}
+              onDeleteRows={onDeleteRows} />
 
             </Grid>
           </Grid>
