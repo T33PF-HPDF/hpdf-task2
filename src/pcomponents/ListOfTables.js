@@ -37,7 +37,7 @@ const styles = theme => ({
 class ListOfTables extends React.Component {
 
   state = {
-    openAddTable: true
+    openAddTable: false
   }
 
 
