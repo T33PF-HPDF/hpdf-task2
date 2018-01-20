@@ -67,34 +67,22 @@ class AddTable extends Component {
 
     state = {
 
-        newField: 'newField Name',
+        table_name: '',
 
-        table_name: "table_name",
-        fields: [
-            {
-                name: 'first'
-            },
-            {
-                name: 'second'
-            }, {
-                name: 'third'
-            },
-            {
-                name: 'fourth'
-            },
-            {
-                name: 'fourth'
-            },
+        columnNames: [],
 
-        ]
+        newField: '',
 
     }
 
-    onAddTable(){
+    onAddTable() {
+
+      if(  this.state.columnNames.length==0 ) return
+        
         this.props.onAddTableResult(
             {
-                tableName: this.state.table_name,
-                fields : this.state.fields
+                table_name: this.state.table_name,
+                columnNames: this.state.columnNames
             }
         );
     }
@@ -115,32 +103,50 @@ class AddTable extends Component {
             open={this.props.openAddTable}
             onClose={this.handleClose}
         >
+
+          
+
             <div style={getModalStyle()}>
+
+
                 <Typography type="title" id="modal-title">
-                    Add Table
+                    <TextField
+                label="Table Name"
+                value={this.state.table_name}
+                //  onChange={this.handleChange('name')}
+                margin="normal"
+                onChange={
+                    (e) => {
+                        this.setState({
+                            table_name: e.target.value
+                        })
+                    }
+                }
+                style={styles.textField}
+            />
             </Typography>
                 <Typography type="subheading" id="simple-modal-description">
 
 
-                    {this.state.fields.map((val, i) => {
-                        return <Chip
-                            label={val.name}
+                    {this.state.columnNames.map((val, i) => {
+                        return <div><Chip
+                            label={val}
 
                             onDelete={() => {
 
-                                var newFields = this.state.fields.slice();
+                                var newColumnNames = this.state.columnNames.slice();
 
-                                newFields.splice(i, 1);
+                                newColumnNames.splice(i, 1);
 
                                 this.setState(
                                     {
-                                        fields: newFields
+                                        columnNames: newColumnNames
                                     }
                                 )
 
                             }}
 
-                        />
+                        /></div>
                     })}
 
 
@@ -165,7 +171,7 @@ class AddTable extends Component {
 
                             this.setState({
                                 newField: "",
-                                fields: [...this.state.fields, { name: this.state.newField }]
+                                columnNames: [...this.state.columnNames, this.state.newField]
                             })
                     }} > Add column</Button>
 
