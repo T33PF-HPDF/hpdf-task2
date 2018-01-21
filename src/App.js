@@ -128,20 +128,6 @@ class App extends Component {
   //   })
   }
 
-  onAddRow(row) {
-
-
-    counter ++;
-    row.id =counter;
-
-
-    var newstate = {
-      ... this.state,
-    }
-
-    newstate.tables.rows.push(row);
-    this.setState(newstate);
-  }
 
   onDeleteRows(drows) {
 
@@ -256,8 +242,12 @@ class App extends Component {
               columnData={this.state.tables[this.state.selectedTable].columnNames} 
               onAddRow={() => { }} 
               addNewRow = {(row)=>{
+
+                counter++;
                 
-                var newState = Object.assign({},this.state);
+                var newState = Object.assign({},this.state, {
+                  id:counter
+                });
 
               newState.tables[this.state.selectedTable].rows=  [...newState.tables[this.state.selectedTable].rows,row]
 
