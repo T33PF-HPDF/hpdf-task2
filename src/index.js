@@ -96,5 +96,10 @@ var initialState = {
 
 const store = createStore(first,initialState);
 
-ReactDOM.render(<App />, document.getElementById('root'));
+var render = () => ReactDOM.render(<App reduxState={store.getState()} />, document.getElementById('root'));
+
+render();
+
+store.subscribe(render);
+
 registerServiceWorker();
